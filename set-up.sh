@@ -35,7 +35,7 @@ brew install --cask \
     visual-studio-code \
     jetbrains-toolbox \
     raycast \
-    magnet \
+    rectangle \
     lunar \
     scroll-reverser
 
