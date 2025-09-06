@@ -2,5 +2,5 @@
 
 ```sh
 chmod +x set-up.sh
-./setup.sh
+./set-up.sh
 ```

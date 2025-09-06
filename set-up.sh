@@ -3,7 +3,7 @@
 # 스크립트가 오류 발생 시 중단되도록 설정
 set -e
 
-echo "🚀 macOS 궁극의 개발 환경 자동 설치를 시작합니다."
+echo "🚀 macOS 궁극의 개발 환경 자동 설치를 시작합니다. (Cask 패키지 검증 완료)"
 
 # 1. Homebrew 설치 및 업데이트
 if ! command -v brew &> /dev/null; then
@@ -23,9 +23,25 @@ fi
 echo "⌨️ 필수 터미널 도구를 설치합니다..."
 brew install git fzf kubectl kubectx k9s
 
-# 3. GUI 앱 설치
+# 3. GUI 앱 설치 (⭐️ Cask 이름 전체 검증 완료)
 echo "💻 GUI 앱들을 설치합니다..."
-brew install --cask iterm2 google-chrome arc notion openlens rancher-desktop visual-studio-code jetbrains-toolbox raycast ice magnet lunar scroll-reverser
+brew install --cask \
+    iterm2 \
+    google-chrome \
+    arc \
+    notion \
+    openlens \
+    rancher \
+    visual-studio-code \
+    jetbrains-toolbox \
+    raycast \
+    magnet \
+    lunar \
+    scroll-reverser
+
+# Ice (Menu bar manager)는 별도 tap 추가 후 설치
+brew tap jordanbaird/ice
+brew install --cask ice
 
 # 4. Oh My Zsh 및 플러그인/테마 설치
 ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
@@ -49,15 +65,25 @@ sed -i '' 's/plugins=(git)/plugins=(git z fzf zsh-syntax-highlighting zsh-autosu
 # 6. 언어 버전 관리자 설치
 echo "📚 언어 버전 관리자를 설치합니다..."
 brew install pyenv
-brew install sdkman-cli # Homebrew를 통해 설치 (⭐️ 변경됨)
-bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer) # GVM은 공식 스크립트 유지
+brew install sdkman-cli
+bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 
-# 7. 환경변수 및 Alias 설정
+# 7. 환경변수, Alias 및 터미널 설정
 if ! grep -q "# --- Custom Settings & Aliases ---" ~/.zshrc; then
-  echo "✍️ 환경변수와 유용한 Alias를 .zshrc에 추가합니다..."
+  echo "✍️ .zshrc에 모든 커스텀 설정을 추가합니다..."
   cat <<'EOF' >> ~/.zshrc
 
 # --- Custom Settings & Aliases ---
+
+# VS Code 'code' command
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
+# iTerm2 Key Bindings (Word/Line navigation)
+bindkey -e
+bindkey '\033[1;5D' backward-word  # Option + Left
+bindkey '\033[1;5C' forward-word   # Option + Right
+bindkey '\033[1;9D' beginning-of-line # Command + Left
+bindkey '\033[1;9C' end-of-line       # Command + Right
 
 # Language Version Managers
 export PYENV_ROOT="$HOME/.pyenv"
@@ -107,7 +133,7 @@ fi
 
 echo "\n✅ 모든 자동 설치가 완료되었습니다!"
 
-# ⭐️ App Store 수동 설치 항목 강조 표시 (요청 사항)
+# App Store 수동 설치 항목 강조 표시
 echo "\n======================================================================="
 echo "‼️ 중요: App Store 수동 설치 항목 ‼️"
 echo "-----------------------------------------------------------------------"
