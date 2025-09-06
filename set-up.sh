@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # 스크립트가 오류 발생 시 중단되도록 설정
-set -e
+
 
 echo "🚀 macOS 궁극의 개발 환경 자동 설치를 시작합니다. (Cask 패키지 검증 완료)"
 
@@ -37,11 +37,8 @@ brew install --cask \
     raycast \
     rectangle \
     lunar \
-    scroll-reverser
-
-# Ice (Menu bar manager)는 별도 tap 추가 후 설치
-brew tap jordanbaird/ice
-brew install --cask ice
+    scroll-reverser \
+    jordanbaird-ice
 
 # 4. Oh My Zsh 및 플러그인/테마 설치
 ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
