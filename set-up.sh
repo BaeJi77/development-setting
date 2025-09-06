@@ -1,9 +1,8 @@
 #!/bin/zsh
 
-# 스크립트가 오류 발생 시 중단되도록 설정
+# 오류가 발생해도 스크립트가 중단되지 않도록 'set -e'는 사용하지 않습니다.
 
-
-echo "🚀 macOS 궁극의 개발 환경 자동 설치를 시작합니다. (Cask 패키지 검증 완료)"
+echo "🚀 macOS 궁극의 개발 환경 자동 설치를 시작합니다."
 
 # 1. Homebrew 설치 및 업데이트
 if ! command -v brew &> /dev/null; then
@@ -20,33 +19,36 @@ else
 fi
 
 # 2. 필수 터미널 도구 설치
-echo "⌨️ 필수 터미널 도구를 설치합니다..."
-brew install git fzf kubectl kubectx k9s
+echo "\n⌨️ 필수 터미널 도구를 개별적으로 설치합니다..."
+brew install git
+brew install fzf
+brew install kubectl
+brew install kubectx
+brew install k9s
 
-# 3. GUI 앱 설치 (⭐️ Cask 이름 전체 검증 완료)
-echo "💻 GUI 앱들을 설치합니다..."
-brew install --cask \
-    iterm2 \
-    google-chrome \
-    arc \
-    notion \
-    openlens \
-    rancher \
-    visual-studio-code \
-    jetbrains-toolbox \
-    raycast \
-    rectangle \
-    lunar \
-    scroll-reverser \
-    jordanbaird-ice
+# 3. GUI 앱 설치 (오류 수정 및 개별 설치)
+echo "\n💻 GUI 앱들을 개별적으로 설치합니다..."
+brew install --cask iterm2
+brew install --cask google-chrome
+brew install --cask arc
+brew install --cask notion
+brew install --cask openlens
+brew install --cask rancher
+brew install --cask visual-studio-code
+brew install --cask jetbrains-toolbox
+brew install --cask raycast
+brew install --cask rectangle
+brew install --cask lunar
+brew install --cask scroll-reverser
+brew install --cask jordanbaird-ice
 
-# 4. Oh My Zsh 및 플러그인/테마 설치
+# 4. Oh My Zsh 및 플러그인/테마 설치 (멱등성 보장)
 ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
-if [ ! -d "$ZSH_CUSTOM" ]; then
-    echo "셸을 Oh My Zsh로 업그레이드합니다..."
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "\n셸을 Oh My Zsh로 업그레이드합니다..."
     /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 else
-    echo "👍 Oh My Zsh는 이미 설치되어 있습니다."
+    echo "\n👍 Oh My Zsh는 이미 설치되어 있습니다."
 fi
 
 echo "🎨 Zsh 플러그인과 테마를 설치합니다..."
@@ -59,11 +61,16 @@ echo "⚙️ .zshrc 설정을 업데이트합니다..."
 sed -i '' 's/ZSH_THEME=".*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
 sed -i '' 's/plugins=(git)/plugins=(git z fzf zsh-syntax-highlighting zsh-autosuggestions)/' ~/.zshrc
 
-# 6. 언어 버전 관리자 설치
-echo "📚 언어 버전 관리자를 설치합니다..."
+# 6. 언어 버전 관리자 설치 (⭐️ GVM 멱등성 적용)
+echo "\n📚 언어 버전 관리자를 설치합니다..."
 brew install pyenv
-brew install sdkman-cli
-bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+
+if [ ! -d "$HOME/.gvm" ]; then
+    echo "Go 버전 관리자(GVM)를 설치합니다..."
+    bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+else
+    echo "👍 GVM은 이미 설치되어 있습니다."
+fi
 
 # 7. 환경변수, Alias 및 터미널 설정
 if ! grep -q "# --- Custom Settings & Aliases ---" ~/.zshrc; then
@@ -80,14 +87,13 @@ bindkey -e
 bindkey '\033[1;5D' backward-word  # Option + Left
 bindkey '\033[1;5C' forward-word   # Option + Right
 bindkey '\033[1;9D' beginning-of-line # Command + Left
-bindkey '\033[1;9C' end-of-line       # Command + Right
+bindkey '\03_3[1;9C' end-of-line       # Command + Right
 
 # Language Version Managers
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
 
 # General
@@ -95,7 +101,7 @@ alias l="ls -lAh"
 alias la="ls -A"
 alias ll="ls -l"
 alias ..="cd .."
-alias ...="cd ../.."
+alias ...="cd ../.."'
 alias grep='grep --color=auto'
 
 # Git
@@ -112,11 +118,10 @@ alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset
 
 # Kubernetes
 alias k="kubectl"
-alias kgp="k get pods -o wide"
-alias kgn="k get nodes -o wide"
+alias kp="k get pods -o wide"
+alias kn="k get nodes -o wide"
 alias ka="k apply -f"
 alias kd="k describe"
-alias kdel="k delete"
 alias klogs="k logs -f"
 alias kx="kubectx"
 alias kns="kubens"
@@ -144,8 +149,4 @@ echo "  2. Next Meeting (메뉴 막대 일정 알리미)"
 echo "     👉 링크: https://apps.apple.com/us/app/next-meeting/id1520163534"
 echo "=======================================================================\n"
 
-echo "잠시 후 Powerlevel10k 설정 마법사를 시작합니다..."
-sleep 2
-
-# 새로운 zsh를 실행하여 모든 설정을 적용하고 p10k 설정 마법사를 자동으로 시작
-exec zsh
+echo "터미널을 재시작하면 모든 설정이 적용됩니다. Powerlevel10k 설정이 필요하다면 'p10k configure'를 실행하세요."
