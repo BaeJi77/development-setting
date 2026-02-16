@@ -1,0 +1,82 @@
+# ============================================================
+# Aliases - 모든 셸 단축 명령어
+# .zshrc에서 source로 불러옵니다.
+# ============================================================
+
+# --- 기본 명령어 대체 (bat, eza, ripgrep, fd, trash, tldr) ---
+
+# cat → bat (syntax highlighting, 줄번호, Git 변경 표시)
+alias cat="bat --paging=never"
+alias catp="bat"                    # 페이저(less) 모드
+alias catl="bat --plain"            # 순수 텍스트 모드 (no line numbers)
+
+# ls → eza (아이콘, 컬러, Git 상태)
+alias ls="eza --icons --group-directories-first"
+alias l="eza -lah --icons --group-directories-first"
+alias la="eza -a --icons --group-directories-first"
+alias ll="eza -l --icons --group-directories-first"
+alias lt="eza --tree --level=2 --icons"     # 트리 형태로 보기
+alias lta="eza --tree --level=3 --icons -a" # 트리 (숨김파일 포함)
+
+# grep → ripgrep (초고속 검색)
+alias grep="rg --color=auto"
+alias rgi="rg --ignore-case"        # 대소문자 무시
+alias rgf="rg --files-with-matches" # 파일명만 출력
+
+# find → fd (초고속 파일 검색)
+alias find="fd"
+
+# rm → trash (휴지통으로 이동, 안전한 삭제)
+alias rm="trash"
+
+# man → tldr (실용적 예제)
+alias help="tldr"
+
+# --- 디렉토리 이동 ---
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+# --- Git ---
+alias gs="git status"
+alias ga="git add"
+alias gaa="git add ."
+alias gc="git checkout"
+alias gco="git checkout"
+alias gcm="git commit -m"
+alias gp="git push"
+alias gpull="git pull"
+alias gl="git log --oneline -20"
+alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gd="git diff"
+alias gds="git diff --staged"
+alias gb="git branch"
+alias gba="git branch -a"
+alias gst="git stash"
+alias gstp="git stash pop"
+alias lg="lazygit"
+
+# --- Kubernetes ---
+alias k="kubectl"
+alias kp="k get pods -o wide"
+alias kn="k get nodes -o wide"
+alias ks="k get svc -o wide"
+alias ka="k apply -f"
+alias kd="k describe"
+alias klogs="k logs -f"
+alias kx="kubectx"
+alias kns="kubens"
+alias ldk="lazydocker"
+
+# --- Docker ---
+alias d="docker"
+alias dc="docker compose"
+alias dps="docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}'"
+alias dimg="docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}'"
+
+# --- 유틸리티 ---
+alias ports="lsof -iTCP -sTCP:LISTEN -n -P"     # 열린 포트 확인
+alias myip="curl -s ifconfig.me"                  # 공인 IP 확인
+alias localip="ipconfig getifaddr en0"            # 내부 IP 확인
+alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+alias cleanup="fd -H -g '.DS_Store' -x rm {}"     # .DS_Store 정리
