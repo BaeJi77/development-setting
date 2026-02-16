@@ -2,6 +2,8 @@
 
 새로운 Mac에서 개발 환경을 원커맨드로 자동 설정합니다.
 
+> **멱등성 보장**: 몇 번이든 반복 실행해도 동일한 결과를 보장합니다. 기존 설정이 있는 환경에서도 안전하게 마이그레이션합니다.
+
 ## 🚀 사용법
 
 ```bash
@@ -9,6 +11,13 @@ git clone https://github.com/BaeJi77/development-setting.git ~/development-setti
 cd ~/development-setting
 chmod +x set-up.sh && ./set-up.sh
 ```
+
+실행 전 **미리보기** (변경 없이 어떤 작업이 수행될지 확인):
+```bash
+./set-up.sh --dry-run
+```
+
+> 💾 실행 시 `~/.zshrc`, `~/.zprofile`, `~/.gitconfig`를 자동으로 `~/.dotfiles-backup/`에 백업합니다.
 
 ---
 
