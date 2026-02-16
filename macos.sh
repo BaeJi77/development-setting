@@ -49,10 +49,10 @@ defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
 # --- 키보드 ---
-# 키 반복 속도 (낮을수록 빠름, 기본 6)
-defaults write NSGlobalDomain KeyRepeat -int 0
-# 키 반복 시작까지 대기 시간 (낮을수록 빠름, 기본 25)
-defaults write NSGlobalDomain InitialKeyRepeat -int 0
+# 키 반복 속도 (낮을수록 빠름, 기본 6, 최소 1. 0은 비활성화됨)
+defaults write NSGlobalDomain KeyRepeat -int 1
+# 키 반복 시작까지 대기 시간 (낮을수록 빠름, 기본 25, 최소 10. 0은 무시됨)
+defaults write NSGlobalDomain InitialKeyRepeat -int 10
 # 자동 대문자 비활성화
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 # 자동 마침표 비활성화
