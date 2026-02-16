@@ -40,6 +40,9 @@ brew "k9s"                  # Kubernetes TUI
 brew "pyenv"                # Python 버전 관리
 brew "nvm"                  # Node.js 버전 관리
 
+# 언어
+brew "go"                   # Go
+
 # --- GUI 앱 (cask) ---
 
 # 터미널
@@ -66,6 +69,9 @@ cask "scroll-reverser"      # 마우스 스크롤 방향
 cask "jordanbaird-ice"      # 메뉴바 관리
 cask "keka"                 # 압축 해제
 cask "karabiner-elements"   # 키 리매핑
+cask "slack"
+cask "adguard"
+cask "obsidian"
 
 # --- Mac App Store (mas) ---
 mas "Clop", id: 1516295283
